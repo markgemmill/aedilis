@@ -30,8 +30,8 @@ func (app *Application) Run(initializers ...InitFunc) error {
 	return err
 }
 
-// registerComponent adds the named component to the registry.
-func (app *Application) registerComponent(name string, component Component) error {
+// RegisterComponent adds the named component to the registry.
+func (app *Application) RegisterComponent(name string, component Component) error {
 	fmt.Printf("Registering component %s\n", name)
 	return app.components.Add(name, component)
 }
@@ -47,7 +47,7 @@ func (app *Application) Init(initializer InitFunc) error {
 
 	if component != nil {
 		name := generateComponentName(component)
-		err = app.registerComponent(name, component)
+		err = app.RegisterComponent(name, component)
 		if err != nil {
 			return err
 		}
