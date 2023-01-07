@@ -1,8 +1,6 @@
 package aedilis
 
-import (
-	"fmt"
-)
+import "fmt"
 
 // ComponentA
 type ComponentA struct {
