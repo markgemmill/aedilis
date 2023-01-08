@@ -39,26 +39,26 @@ func (app *Application) RegisterComponent(name string, component Component) erro
 // Init takes a component initialization function and calls it immediately.
 func (app *Application) Init(initializer InitFunc) error {
 
-	component, starter, closer, err := initializer(app)
+	options, err := initializer(app)
 
 	if err != nil {
 		return err
 	}
 
-	if component != nil {
-		name := generateComponentName(component)
-		err = app.RegisterComponent(name, component)
+	if options.Component != nil {
+		name := options.Name()
+		err = app.RegisterComponent(name, options.Component)
 		if err != nil {
 			return err
 		}
 	}
 
-	if starter != nil {
-		app.starters.Add(starter)
+	if options.Starter != nil {
+		app.starters.Add(options.Starter)
 	}
 
-	if closer != nil {
-		app.closers.Add(closer)
+	if options.Closer != nil {
+		app.closers.Add(options.Closer)
 	}
 
 	return nil

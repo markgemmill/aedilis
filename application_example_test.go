@@ -11,10 +11,15 @@ func (c *ComponentA) DoIt() {
 	fmt.Println("ComponentA does it!")
 }
 
-func InitA(app *Application) (Component, ComponentFunc, ComponentFunc, error) {
+func InitA(app *Application) (ComponentOptions, error) {
 	fmt.Println("Initializing A!")
 	c := &ComponentA{"A, eh!"}
-	return c, StartA(c), StopA(c), nil
+	return ComponentOptions{
+		Component: c,
+		Starter:   StartA(c),
+		Closer:    StopA(c),
+		Alias:     "",
+	}, nil
 }
 
 func StartA(cmp *ComponentA) ComponentFunc {
@@ -41,15 +46,15 @@ func (c *ComponentB) DoIt() {
 	fmt.Println("ComponentB does it!")
 }
 
-func InitB(app *Application) (Component, ComponentFunc, ComponentFunc, error) {
+func InitB(app *Application) (ComponentOptions, error) {
 	fmt.Println("Initializing B!")
 	a, err := GetComponent[*ComponentA](app, "*aedilis.ComponentA")
 	if err != nil {
-		return nil, nil, nil, err
+		return ComponentError(err)
 	}
 	b := &ComponentB{Name: "B, eh!", Other: a}
 	fmt.Printf("  - %T uses %T\n", b, a)
-	return b, StartB(b), StopB(b), nil
+	return ComponentOptions{Component: b, Starter: StartB(b), Closer: StopB(b)}, nil
 }
 
 func StartB(c *ComponentB) ComponentFunc {

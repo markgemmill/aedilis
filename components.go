@@ -25,10 +25,28 @@ type StartFunc func(app *Application) error
 
 type CloseFunc func(app *Application) error
 
+type ComponentOptions struct {
+	Component Component
+	Starter   ComponentFunc
+	Closer    ComponentFunc
+	Alias     string
+}
+
+func ComponentError(err error) (ComponentOptions, error) {
+	return ComponentOptions{}, err
+}
+
+func (co *ComponentOptions) Name() string {
+	if co.Alias == "" {
+		return generateComponentName(co.Component)
+	}
+	return co.Alias
+}
+
 // InitFunc is a function type specific to initializing a component. It
 // must return the initialized component object and a start and shutdown function.
 // These could all be nil. There is no specific requirement that they exist.
-type InitFunc func(app *Application) (Component, ComponentFunc, ComponentFunc, error)
+type InitFunc func(app *Application) (ComponentOptions, error)
 
 // ComponentRegistry maintains a named list of application components.
 type ComponentRegistry struct {
