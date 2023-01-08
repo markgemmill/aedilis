@@ -91,12 +91,12 @@ func GetComponent[T Component](app *Application, name string) (T, error) {
 
 // MustGetComponent fetches the named component object from the registry. If the component
 // does not exist panic is raised.
-func MustGetComponent[T Component](app *Application, name string) (T, error) {
+func MustGetComponent[T Component](app *Application, name string) T {
 	c, err := GetComponent[T](app, name)
 	if err != nil {
 		panic(err)
 	}
-	return c, nil
+	return c
 }
 
 func Init(app *Application, initializers ...InitFunc) error {
