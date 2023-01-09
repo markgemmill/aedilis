@@ -11,8 +11,8 @@ type Application struct {
 func New() *Application {
 	app := &Application{}
 	app.components = NewComponentRegistry()
-	app.starters = NewActionRegistry()
-	app.closers = NewActionRegistry()
+	app.starters = NewActionRegistry("starter")
+	app.closers = NewActionRegistry("shutdown")
 	return app
 }
 
@@ -36,6 +36,16 @@ func (app *Application) RegisterComponent(name string, component Component) erro
 	return app.components.Add(name, component)
 }
 
+func (app *Application) RegisterStarter(name string, starter ComponentFunc) {
+	fmt.Printf("Registering start function %s\n", name)
+	app.starters.Add(name, starter)
+}
+
+func (app *Application) RegisterCloser(name string, closer ComponentFunc) {
+	fmt.Printf("Registering close function %s\n", name)
+	app.closers.Add(name, closer)
+}
+
 // Init takes a component initialization function and calls it immediately.
 func (app *Application) Init(initializer InitFunc) error {
 
@@ -45,8 +55,9 @@ func (app *Application) Init(initializer InitFunc) error {
 		return err
 	}
 
+	name := options.Name()
+
 	if options.Component != nil {
-		name := options.Name()
 		err = app.RegisterComponent(name, options.Component)
 		if err != nil {
 			return err
@@ -54,11 +65,11 @@ func (app *Application) Init(initializer InitFunc) error {
 	}
 
 	if options.Starter != nil {
-		app.starters.Add(options.Starter)
+		app.RegisterStarter(name, options.Starter)
 	}
 
 	if options.Closer != nil {
-		app.closers.Add(options.Closer)
+		app.RegisterCloser(name, options.Closer)
 	}
 
 	return nil
