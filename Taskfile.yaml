@@ -2,9 +2,6 @@
 
 version: '3'
 
-vars:
-  VERSION:
-    sh: dover
 
 tasks:
 

@@ -78,21 +78,21 @@ func ExampleRegistry() {
 
 	// output:
 	// Initializing A!
-	// Registering component *aedilis.ComponentA
-	// Registering start function *aedilis.ComponentA
-	// Registering close function *aedilis.ComponentA
+	// [aedilis] Registering component *aedilis.ComponentA
+	// [aedilis] Registering start function *aedilis.ComponentA
+	// [aedilis] Registering close function *aedilis.ComponentA
 	// Initializing B!
 	//   - *aedilis.ComponentB uses *aedilis.ComponentA
-	// Registering component *aedilis.ComponentB
-	// Registering start function *aedilis.ComponentB
-	// Registering close function *aedilis.ComponentB
-	// Executing starter function *aedilis.ComponentA
+	// [aedilis] Registering component *aedilis.ComponentB
+	// [aedilis] Registering start function *aedilis.ComponentB
+	// [aedilis] Registering close function *aedilis.ComponentB
+	// [aedilis] Executing starter function *aedilis.ComponentA
 	// Starting *aedilis.ComponentA...
-	// Executing starter function *aedilis.ComponentB
+	// [aedilis] Executing starter function *aedilis.ComponentB
 	// Starting *aedilis.ComponentB...
-	// Executing shutdown function *aedilis.ComponentB
+	// [aedilis] Executing shutdown function *aedilis.ComponentB
 	// Stopping *aedilis.ComponentB...
-	// Executing shutdown function *aedilis.ComponentA
+	// [aedilis] Executing shutdown function *aedilis.ComponentA
 	// Stopping *aedilis.ComponentA...
 
 }

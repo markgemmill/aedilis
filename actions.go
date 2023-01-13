@@ -29,7 +29,7 @@ func (reg *ActionRegistry) Count() int {
 // Execute all the functions in the registry in the order registered.
 func (reg *ActionRegistry) Execute(app *Application, haltOnErr bool) error {
 	for _, name := range reg.order {
-		app.Console.Write("Executing %s function %s\n", reg.name, name)
+		app.Console.Write("Executing %s function %s", reg.name, name)
 		err := reg.actions[name](app)
 		if haltOnErr == true && err != nil {
 			return err
@@ -43,7 +43,7 @@ func (reg *ActionRegistry) Execute(app *Application, haltOnErr bool) error {
 func (reg *ActionRegistry) ExecuteReverse(app *Application, haltOnErr bool) error {
 	for i := len(reg.order) - 1; i >= 0; i-- {
 		name := reg.order[i]
-		app.Console.Write("Executing %s function %s\n", reg.name, name)
+		app.Console.Write("Executing %s function %s", reg.name, name)
 		err := reg.actions[name](app)
 		if haltOnErr == true && err != nil {
 			return err

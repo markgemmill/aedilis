@@ -1,6 +1,10 @@
 package aedilis
 
-import "fmt"
+import (
+	"fmt"
+	"os"
+	"os/signal"
+)
 
 type Application struct {
 	Console    *Console
@@ -16,6 +20,20 @@ func New() *Application {
 	app.closers = NewActionRegistry("shutdown")
 	app.Console = NewConsole()
 	return app
+}
+
+func (app *Application) StartWithInterruptWrapper(startFunc ComponentFunc) ComponentFunc {
+	return func(app *Application) error {
+		var err error
+		go func() {
+			err = startFunc(app)
+		}()
+
+		quit := make(chan os.Signal, 1)
+		signal.Notify(quit, os.Interrupt)
+		<-quit
+		return err
+	}
 }
 
 func (app *Application) Run(initializers ...InitFunc) error {
