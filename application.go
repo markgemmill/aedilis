@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"os/signal"
+	"syscall"
 )
 
 type Application struct {
@@ -30,7 +31,7 @@ func (app *Application) StartWithInterruptWrapper(startFunc ComponentFunc) Compo
 		}()
 
 		quit := make(chan os.Signal, 1)
-		signal.Notify(quit, os.Interrupt, os.Kill)
+		signal.Notify(quit, os.Interrupt, os.Kill, syscall.SIGTERM, syscall.SIGKILL)
 		<-quit
 		return err
 	}
