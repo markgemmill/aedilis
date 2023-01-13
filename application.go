@@ -3,7 +3,7 @@ package aedilis
 import "fmt"
 
 type Application struct {
-	console    *Console
+	Console    *Console
 	components *ComponentRegistry
 	starters   *ActionRegistry
 	closers    *ActionRegistry
@@ -14,14 +14,14 @@ func New() *Application {
 	app.components = NewComponentRegistry()
 	app.starters = NewActionRegistry("starter")
 	app.closers = NewActionRegistry("shutdown")
-	app.console = NewConsole()
+	app.Console = NewConsole()
 	return app
 }
 
 func (app *Application) Run(initializers ...InitFunc) error {
 	err := Init(app, initializers...)
 	if err != nil {
-		app.console.WriteError("%s", err.Error())
+		app.Console.WriteError("%s", err.Error())
 		app.Stop()
 		return err
 	}
@@ -34,17 +34,17 @@ func (app *Application) Run(initializers ...InitFunc) error {
 
 // RegisterComponent adds the named component to the registry.
 func (app *Application) RegisterComponent(name string, component Component) error {
-	app.console.Write("Registering component %s", name)
+	app.Console.Write("Registering component %s", name)
 	return app.components.Add(name, component)
 }
 
 func (app *Application) RegisterStarter(name string, starter ComponentFunc) {
-	app.console.Write("Registering start function %s", name)
+	app.Console.Write("Registering start function %s", name)
 	app.starters.Add(name, starter)
 }
 
 func (app *Application) RegisterCloser(name string, closer ComponentFunc) {
-	app.console.Write("Registering close function %s", name)
+	app.Console.Write("Registering close function %s", name)
 	app.closers.Add(name, closer)
 }
 

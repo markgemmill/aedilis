@@ -34,6 +34,10 @@ func (c *Console) String() string {
 	return c.sb.String()
 }
 
+func (c *Console) Clear() {
+	c.sb.Reset()
+}
+
 func NewConsole() *Console {
 	c := Console{}
 	c.sb = strings.Builder{}
