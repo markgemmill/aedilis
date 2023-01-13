@@ -30,7 +30,7 @@ func (app *Application) StartWithInterruptWrapper(startFunc ComponentFunc) Compo
 		}()
 
 		quit := make(chan os.Signal, 1)
-		signal.Notify(quit, os.Interrupt)
+		signal.Notify(quit, os.Interrupt, os.Kill)
 		<-quit
 		return err
 	}
