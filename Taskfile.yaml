@@ -2,8 +2,20 @@
 
 version: '3'
 
+vars:
+  VERSION:
+    sh: dover
 
 tasks:
+
+  bump:
+    cmds:
+      - dover -ip
+
+  tag:
+    cmds:
+      - echo v{{.VERSION}}
+#      - git tag -a v{{.VERSION}} -m "v{{.VERSION}}"
 
   test:
     cmds:

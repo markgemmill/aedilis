@@ -24,6 +24,7 @@ func (c *Console) Write(msg string, opt ...any) {
 	output := fmt.Sprintf(msg, opt...)
 	fmt.Printf("%s %s\n", yellow(c.prefix), output)
 	c.sb.WriteString(output)
+	c.sb.WriteString("\n")
 }
 
 func (c *Console) WriteError(msg string, opt ...any) {
@@ -36,8 +37,10 @@ func (c *Console) String() string {
 	return c.sb.String()
 }
 
-func (c *Console) Clear() {
+func (c *Console) Clear() string {
+	content := c.String()
 	c.sb.Reset()
+	return content
 }
 
 func NewConsole(name string) *Console {
