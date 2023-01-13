@@ -15,12 +15,14 @@ func init() {
 }
 
 type Console struct {
-	sb strings.Builder
+	name   string
+	prefix string
+	sb     strings.Builder
 }
 
 func (c *Console) Write(msg string, opt ...any) {
 	output := fmt.Sprintf(msg, opt...)
-	fmt.Printf("%s %s\n", yellow("[aedilis]"), output)
+	fmt.Printf("%s %s\n", yellow(c.prefix), output)
 	c.sb.WriteString(output)
 }
 
@@ -38,8 +40,14 @@ func (c *Console) Clear() {
 	c.sb.Reset()
 }
 
-func NewConsole() *Console {
-	c := Console{}
+func NewConsole(name string) *Console {
+	if name == "" {
+		name = "aedilis"
+	}
+	c := Console{
+		name:   name,
+		prefix: fmt.Sprintf("[%s]", name),
+	}
 	c.sb = strings.Builder{}
 	return &c
 }

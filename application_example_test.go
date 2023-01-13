@@ -73,7 +73,7 @@ func StopB(c *ComponentB) ComponentFunc {
 
 func ExampleRegistry() {
 
-	app := New()
+	app := New("")
 	_ = app.Run(InitA, InitB)
 
 	// output:
@@ -93,6 +93,32 @@ func ExampleRegistry() {
 	// [aedilis] Executing shutdown function *aedilis.ComponentB
 	// Stopping *aedilis.ComponentB...
 	// [aedilis] Executing shutdown function *aedilis.ComponentA
+	// Stopping *aedilis.ComponentA...
+
+}
+
+func ExampleRegistryWithName() {
+
+	app := New("testing")
+	_ = app.Run(InitA, InitB)
+
+	// output:
+	// Initializing A!
+	// [testing] Registering component *aedilis.ComponentA
+	// [testing] Registering start function *aedilis.ComponentA
+	// [testing] Registering close function *aedilis.ComponentA
+	// Initializing B!
+	//   - *aedilis.ComponentB uses *aedilis.ComponentA
+	// [testing] Registering component *aedilis.ComponentB
+	// [testing] Registering start function *aedilis.ComponentB
+	// [testing] Registering close function *aedilis.ComponentB
+	// [testing] Executing starter function *aedilis.ComponentA
+	// Starting *aedilis.ComponentA...
+	// [testing] Executing starter function *aedilis.ComponentB
+	// Starting *aedilis.ComponentB...
+	// [testing] Executing shutdown function *aedilis.ComponentB
+	// Stopping *aedilis.ComponentB...
+	// [testing] Executing shutdown function *aedilis.ComponentA
 	// Stopping *aedilis.ComponentA...
 
 }

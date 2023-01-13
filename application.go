@@ -15,12 +15,12 @@ type Application struct {
 	closers    *ActionRegistry
 }
 
-func New() *Application {
+func New(name string) *Application {
 	app := &Application{}
 	app.components = NewComponentRegistry()
 	app.starters = NewActionRegistry("starter")
 	app.closers = NewActionRegistry("shutdown")
-	app.Console = NewConsole()
+	app.Console = NewConsole(name)
 	return app
 }
 
