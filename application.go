@@ -8,6 +8,7 @@ import (
 )
 
 type Application struct {
+	interrupt  int
 	Console    *Console
 	components *ComponentRegistry
 	starters   *ActionRegistry
@@ -24,6 +25,7 @@ func New() *Application {
 }
 
 func (app *Application) StartWithInterruptWrapper(startFunc ComponentFunc) ComponentFunc {
+	app.interrupt += 1
 	return func(app *Application) error {
 		var err error
 		go func() {
@@ -57,9 +59,13 @@ func (app *Application) RegisterComponent(name string, component Component) erro
 	return app.components.Add(name, component)
 }
 
-func (app *Application) RegisterStarter(name string, starter ComponentFunc) {
+func (app *Application) RegisterStarter(name string, starter ComponentFunc) error {
 	app.Console.Write("Registering start function %s", name)
+	if app.interrupt > 1 {
+		return fmt.Errorf("Attempting to register a second wrapped 'start with interrupt' function.")
+	}
 	app.starters.Add(name, starter)
+	return nil
 }
 
 func (app *Application) RegisterCloser(name string, closer ComponentFunc) {
@@ -86,7 +92,10 @@ func (app *Application) Init(initializer InitFunc) error {
 	}
 
 	if options.Starter != nil {
-		app.RegisterStarter(name, options.Starter)
+		err = app.RegisterStarter(name, options.Starter)
+		if err != nil {
+			return err
+		}
 	}
 
 	if options.Closer != nil {
